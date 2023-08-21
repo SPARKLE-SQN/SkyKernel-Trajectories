@@ -21,7 +21,9 @@
 using System.IO;
 using KSP.Localization;
 using KSP.UI.Screens;
+using ToolbarControl_NS;
 using UnityEngine;
+using ClickThroughFix;
 
 namespace Trajectories
 {
@@ -30,6 +32,10 @@ namespace Trajectories
     /// </summary>
     internal static class AppLauncherButton
     {
+        internal const string MODID = "Trajectories_NS";
+        internal const string MODNAME = "Trajectories";
+
+#if false
         private class BlizzyToolbarButtonVisibility : IVisibility
         {
             private static IVisibility flight_visibility;
@@ -51,6 +57,7 @@ namespace Trajectories
 
             public bool Visible => flight_visibility.Visible;
         }
+#endif
 
         /// <summary> Toolbar button icon style</summary>
         internal enum IconStyleType
@@ -65,9 +72,13 @@ namespace Trajectories
         private static Texture2D active_icon_texture = null;
         private static Texture2D auto_icon_texture = null;
 
+        static ToolbarControl toolbarControl;
+
+#if false
         // Toolbar buttons
         private static ApplicationLauncherButton stock_toolbar_button = null;
         private static IButton blizzy_toolbar_button = null;
+#endif
 
         private static bool constructed = false;
 
@@ -85,6 +96,25 @@ namespace Trajectories
             else
                 IconStyle = IconStyleType.NORMAL;
 
+            if (toolbarControl == null)
+            {
+                GameObject g1 = new GameObject("g1");
+                string TrajTexturePath =  "Trajectories/Textures/";
+
+                toolbarControl = g1.AddComponent<ToolbarControl>();
+                toolbarControl.AddToAllToolbars(null, null,
+                    ApplicationLauncher.AppScenes.FLIGHT | ApplicationLauncher.AppScenes.MAPVIEW | ApplicationLauncher.AppScenes.TRACKSTATION,
+                    MODID,
+                    "TrajectoriesButton",
+                    TrajTexturePath + "icon",
+                    TrajTexturePath + "iconActive",
+                    TrajTexturePath + "icon-blizzy",
+                    TrajTexturePath + "icon-blizzy",
+                    MODNAME
+                );
+                toolbarControl.AddLeftRightClickCallbacks(OnLeftToggle, OnRightToggle);
+            }
+#if false
             if (ToolbarManager.ToolbarAvailable && Settings.UseBlizzyToolbar)
             {
                 // setup a toolbar button for the blizzy toolbar
@@ -119,8 +149,8 @@ namespace Trajectories
             }
 
             constructed = true;
+#endif
         }
-
         /// <summary> Releases held resources. </summary>
         internal static void Destroy()
         {
@@ -135,11 +165,14 @@ namespace Trajectories
         internal static void DestroyToolbarButton()
         {
             Util.DebugLog("");
+#if false
             DestroyBlizzyToolbarButton();
             DestroyStockToolbarButton();
+#endif
             IconStyle = IconStyleType.NORMAL;
         }
 
+#if false
         /// <summary> Destroys the blizzy toolbar button if it exists. </summary>
         private static void DestroyBlizzyToolbarButton()
         {
@@ -148,7 +181,24 @@ namespace Trajectories
 
             blizzy_toolbar_button = null;
         }
+#endif
 
+        private static void OnLeftToggle()
+        {
+            // check that we have patched conics. If not, apologize to the user and return.
+            if (!Util.IsPatchedConicsAvailable)
+            {
+                ScreenMessages.PostScreenMessage(Localizer.Format("#autoLOC_Trajectories_ConicsErr"));
+                Settings.DisplayTrajectories = false;
+                return;
+            }
+
+            Settings.DisplayTrajectories = !Settings.DisplayTrajectories;
+        }
+        private static void OnRightToggle()
+        {
+            Settings.MainGUIEnabled = !Settings.MainGUIEnabled;
+        }
         private static void OnBlizzyToggle(ClickEvent e)
         {
             if (e.MouseButton == 0)
@@ -169,6 +219,7 @@ namespace Trajectories
             }
         }
 
+#if false
         private static void OnStockTrue() => Settings.MainGUIEnabled = true;
 
         private static void OnStockFalse() => Settings.MainGUIEnabled = false;
@@ -182,7 +233,6 @@ namespace Trajectories
                 stock_toolbar_button = null;
             }
         }
-
         private static void CreateStockToolbarButton()
         {
             Util.DebugLog(!Util.IsFlight ? "Not a flight scene, skipping creation" : "");
@@ -213,44 +263,64 @@ namespace Trajectories
                     stock_toolbar_button.SetTrue(false);
             }
         }
+#endif
 
         /// <summary> Changes the toolbar button icon </summary>
         internal static void ChangeIcon(IconStyleType iconstyle)
         {
-            // no icons for blizzy yet so only change the current icon style
-            if (ToolbarManager.ToolbarAvailable && Settings.UseBlizzyToolbar)
-                switch (iconstyle)
-                {
-                    case IconStyleType.ACTIVE:
-                        IconStyle = IconStyleType.ACTIVE;
-                        break;
-                    case IconStyleType.AUTO:
-                        IconStyle = IconStyleType.AUTO;
-                        break;
-                    default:
-                        IconStyle = IconStyleType.NORMAL;
-                        break;
-                }
+            string icon = "";
+            string TrajTexturePath =  "Trajectories/Textures/";
 
-            else
-                switch (iconstyle)
-                {
-                    case IconStyleType.ACTIVE:
-                        if (stock_toolbar_button != null && StockTexturesAllocated)
-                            stock_toolbar_button.SetTexture(active_icon_texture);
-                        IconStyle = IconStyleType.ACTIVE;
-                        break;
-                    case IconStyleType.AUTO:
-                        if (stock_toolbar_button != null && StockTexturesAllocated)
-                            stock_toolbar_button.SetTexture(auto_icon_texture);
-                        IconStyle = IconStyleType.AUTO;
-                        break;
-                    default:
-                        if (stock_toolbar_button != null && StockTexturesAllocated)
-                            stock_toolbar_button.SetTexture(normal_icon_texture);
-                        IconStyle = IconStyleType.NORMAL;
-                        break;
-                }
+            switch (iconstyle)
+            {
+                case IconStyleType.ACTIVE:
+                    icon = TrajTexturePath + "iconActive";
+                    break;
+                case IconStyleType.AUTO:
+                    icon = TrajTexturePath + "iconAuto";
+                    break;
+                default:
+                    icon = TrajTexturePath + "icon";
+                    break;
+            }
+
+            toolbarControl.SetTexture(icon, TrajTexturePath + "icon-blizzy");
+#if false
+                // no icons for blizzy yet so only change the current icon style
+                if (ToolbarManager.ToolbarAvailable && Settings.UseBlizzyToolbar)
+                    switch (iconstyle)
+                    {
+                        case IconStyleType.ACTIVE:
+                            IconStyle = IconStyleType.ACTIVE;
+                            break;
+                        case IconStyleType.AUTO:
+                            IconStyle = IconStyleType.AUTO;
+                            break;
+                        default:
+                            IconStyle = IconStyleType.NORMAL;
+                            break;
+                    }
+
+                else
+                    switch (iconstyle)
+                    {
+                        case IconStyleType.ACTIVE:
+                            if (stock_toolbar_button != null && StockTexturesAllocated)
+                                stock_toolbar_button.SetTexture(active_icon_texture);
+                            IconStyle = IconStyleType.ACTIVE;
+                            break;
+                        case IconStyleType.AUTO:
+                            if (stock_toolbar_button != null && StockTexturesAllocated)
+                                stock_toolbar_button.SetTexture(auto_icon_texture);
+                            IconStyle = IconStyleType.AUTO;
+                            break;
+                        default:
+                            if (stock_toolbar_button != null && StockTexturesAllocated)
+                                stock_toolbar_button.SetTexture(normal_icon_texture);
+                            IconStyle = IconStyleType.NORMAL;
+                            break;
+                    }
+#endif
         }
     }
 }

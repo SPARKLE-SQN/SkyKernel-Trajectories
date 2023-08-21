@@ -154,7 +154,7 @@ namespace Trajectories
             {
                 config.load();
             }
-            catch (System.Xml.XmlException e)
+            catch (Exception e)
             {
                 if (ConfigError)
                     throw; // if previous error handling failed, we give up
@@ -165,7 +165,15 @@ namespace Trajectories
 
                 string TrajPluginPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
                 Util.Log("Installed at: {0}", TrajPluginPath);
-                TrajPluginPath += "/PluginData/" + System.Reflection.Assembly.GetExecutingAssembly().FullName + "/config.xml";
+
+                string s = System.Reflection.Assembly.GetExecutingAssembly().FullName;
+                s = s.Substring(0, s.IndexOf(','));
+
+                TrajPluginPath += "/PluginData/" +
+                    //System.Reflection.Assembly.GetExecutingAssembly().FullName
+                    s
+                    + "/config.xml";
+                Util.Log("File at: {0}", TrajPluginPath);
                 if (System.IO.File.Exists(TrajPluginPath))
                 {
                     Util.Log("Clearing config file...");

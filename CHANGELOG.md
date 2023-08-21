@@ -1,3 +1,18 @@
+Changelog
+
+2.4.5 (unreleased)
+    Adoption by Linuxgurugamer
+    Replaced toolbar button code with the ToolbarController (replaced about 1000 lines of code)
+    Fixed stock icon being badly formatted
+    Removed Blizzy toolbar option from settings
+    Fixed test of invalid config xml file, now recovers properly from bad file
+    French translation updated
+    Changed directory structure of source
+    Renamed Plugin directory to Plugins
+    Default behaviour for toolbar button now defaults to the stock toolbar
+    Method of controlling which toolbar has the button now controlled by the ToolbarController
+    
+
 
 ## v2.4.4 for KSP 1.8 to 1.12.x
  - 2021-xx-xx

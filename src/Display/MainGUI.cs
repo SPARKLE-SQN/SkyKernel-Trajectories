@@ -555,8 +555,8 @@ namespace Trajectories
                 );
 
             settings_page = new DialogGUIVerticalLayout(false, true, 0, new RectOffset(), TextAnchor.UpperCenter,
-                new DialogGUIToggle(() => { return ToolbarManager.ToolbarAvailable ? Settings.UseBlizzyToolbar : false; },
-                    Localizer.Format("#autoLOC_Trajectories_UseBlizzyToolbar"), OnButtonClick_UseBlizzyToolbar),
+                //new DialogGUIToggle(() => { return ToolbarManager.ToolbarAvailable ? Settings.UseBlizzyToolbar : false; },
+                //    Localizer.Format("#autoLOC_Trajectories_UseBlizzyToolbar"), OnButtonClick_UseBlizzyToolbar),
                 new DialogGUIToggle(() => { return Settings.DefaultDescentIsRetro; },
                     Localizer.Format("#autoLOC_Trajectories_DefaultDescent"), OnButtonClick_UseDescentRetro),
                 new DialogGUIHorizontalLayout(false, false, 0, new RectOffset(), TextAnchor.MiddleCenter,
@@ -878,11 +878,13 @@ namespace Trajectories
 
         private static void OnButtonClick_Update() => Trajectory.InvalidateAerodynamicModel();
 
+#if false
         private static void OnButtonClick_UseBlizzyToolbar(bool inState)
         {
             if (ToolbarManager.ToolbarAvailable)
                 Settings.UseBlizzyToolbar = inState;
         }
+#endif
 
         private static void OnButtonClick_Prograde()
         {
@@ -1147,7 +1149,7 @@ namespace Trajectories
             }
             return null;
         }
-        #endregion
+#endregion
 
         #region Callback methods for the Gui components
         // Callback methods are used by the Gui to retrieve information it needs either for displaying or setting values.
