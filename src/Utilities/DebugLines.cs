@@ -180,7 +180,9 @@ namespace Trajectories
                 return;
 
             material = new Material(Shader.Find("KSP/Orbit Line"));
-            material ??= new Material(Shader.Find("KSP/Particles/Additive"));    // fallback shader
+            //material ??= new Material(Shader.Find("KSP/Particles/Additive"));    // fallback shader
+            if (material == null) 
+                material = new Material(Shader.Find("KSP/Particles/Additive"));    // fallback shader
             if (!material)
             {
                 Util.DebugLogError("material is null");

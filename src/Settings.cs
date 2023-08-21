@@ -112,7 +112,9 @@ namespace Trajectories
             Util.DebugLog("");
             try
             {
-                config ??= PluginConfiguration.CreateForType<Settings>();
+                //config ??= PluginConfiguration.CreateForType<Settings>();
+                if (config == null) 
+                    config = PluginConfiguration.CreateForType<Settings>();
             }
             catch (Exception e)
             {
@@ -135,7 +137,9 @@ namespace Trajectories
             Util.Log("Loading settings");
             try
             {
-                config ??= PluginConfiguration.CreateForType<Settings>();
+                //config ??= PluginConfiguration.CreateForType<Settings>();
+                if (config == null)
+                    config = PluginConfiguration.CreateForType<Settings>();
             }
             catch (Exception e)
             {

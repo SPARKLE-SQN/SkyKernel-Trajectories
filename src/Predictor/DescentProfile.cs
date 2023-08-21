@@ -184,10 +184,19 @@ namespace Trajectories
             Util.DebugLog(Ready ? "Resetting" : "Constructing");
             if (!Ready)
             {
-                AtmosEntry ??= new Node(Localizer.Format("#autoLOC_Trajectories_Entry"), Localizer.Format("#autoLOC_Trajectories_EntryDesc"));
-                HighAltitude ??= new Node(Localizer.Format("#autoLOC_Trajectories_High"), Localizer.Format("#autoLOC_Trajectories_HighDesc"));
-                LowAltitude ??= new Node(Localizer.Format("#autoLOC_Trajectories_Low"), Localizer.Format("#autoLOC_Trajectories_LowDesc"));
-                FinalApproach ??= new Node(Localizer.Format("#autoLOC_Trajectories_Final"), Localizer.Format("#autoLOC_Trajectories_FinalDesc"));
+                //AtmosEntry ??= new Node(Localizer.Format("#autoLOC_Trajectories_Entry"), Localizer.Format("#autoLOC_Trajectories_EntryDesc"));
+                //HighAltitude ??= new Node(Localizer.Format("#autoLOC_Trajectories_High"), Localizer.Format("#autoLOC_Trajectories_HighDesc"));
+                //LowAltitude ??= new Node(Localizer.Format("#autoLOC_Trajectories_Low"), Localizer.Format("#autoLOC_Trajectories_LowDesc"));
+                //FinalApproach ??= new Node(Localizer.Format("#autoLOC_Trajectories_Final"), Localizer.Format("#autoLOC_Trajectories_FinalDesc"));
+
+                if (AtmosEntry == null)
+                    AtmosEntry = new Node(Localizer.Format("#autoLOC_Trajectories_Entry"), Localizer.Format("#autoLOC_Trajectories_EntryDesc"));
+                if (HighAltitude == null)
+                    HighAltitude = new Node(Localizer.Format("#autoLOC_Trajectories_High"), Localizer.Format("#autoLOC_Trajectories_HighDesc"));
+                if (LowAltitude == null)
+                    LowAltitude = new Node(Localizer.Format("#autoLOC_Trajectories_Low"), Localizer.Format("#autoLOC_Trajectories_LowDesc"));
+                if (FinalApproach == null)
+                    FinalApproach = new Node(Localizer.Format("#autoLOC_Trajectories_Final"), Localizer.Format("#autoLOC_Trajectories_FinalDesc"));
             }
 
             Clear();

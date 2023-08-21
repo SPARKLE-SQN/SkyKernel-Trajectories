@@ -75,7 +75,9 @@ namespace Trajectories
 
             //version = Util.ConfigValue(node, "version", Version);     // get saved version, defaults to current version if none
 
-            Settings ??= new Settings();                          // get trajectories settings from the config.xml file if it exists or create a new one
+            //Settings ??= new Settings();                          // get trajectories settings from the config.xml file if it exists or create a new one
+            if (Settings == null)
+                Settings = new Settings();                          // get trajectories settings from the config.xml file if it exists or create a new one
             if (Settings != null)
             {
                 Settings.Load();

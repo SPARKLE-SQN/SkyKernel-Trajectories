@@ -596,7 +596,8 @@ namespace Trajectories
             {
                 StartingState = startingState,
                 IsAtmospheric = false,
-                SpaceOrbit = startingState.StockPatch ?? CreateOrbitFromState(startingState)
+                //SpaceOrbit = startingState.StockPatch ?? CreateOrbitFromState(startingState)
+                SpaceOrbit = (startingState.StockPatch != null) ? startingState.StockPatch : CreateOrbitFromState(startingState)
             };
             patch.EndTime = patch.StartingState.Time + patch.SpaceOrbit.period;
 
@@ -926,7 +927,7 @@ namespace Trajectories
                         Vector3d aerodynamicAccel = currentAccel - gravityAccel;
 
                         // acceleration in the vessel reference frame is acceleration - gravityAccel
-                        maxAccelBackBuffer_ = Math.Max((float) aerodynamicAccel.magnitude, maxAccelBackBuffer_);
+                        maxAccelBackBuffer_ = Math.Max((float)aerodynamicAccel.magnitude, maxAccelBackBuffer_);
 
                         #region Impact Calculation
 

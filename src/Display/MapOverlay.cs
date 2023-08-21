@@ -97,7 +97,10 @@ namespace Trajectories
         internal static void Start()
         {
             Util.DebugLog(material != null ? "Resetting" : "Constructing");
-            material ??= MapView.fetch.orbitLinesMaterial;
+            //material ??= MapView.fetch.orbitLinesMaterial;
+            if (material == null)
+                material = MapView.fetch.orbitLinesMaterial;
+
             map_renderer = PlanetariumCamera.Camera.gameObject.AddComponent<MapTrajectoryRenderer>();
             map_renderer.Visible = false;
         }

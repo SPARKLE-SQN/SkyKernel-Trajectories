@@ -78,8 +78,12 @@ namespace Trajectories
         {
             Util.DebugLog(constructed ? "Resetting" : "Constructing");
 
-            guide_texture ??= new Texture2D(36, 36);
-            reference_texture ??= new Texture2D(36, 36);
+            //guide_texture ??= new Texture2D(36, 36);
+            //reference_texture ??= new Texture2D(36, 36);
+            if (guide_texture == null)
+                guide_texture = new Texture2D(36, 36);
+            if (reference_texture == null)
+                reference_texture = new Texture2D(36, 36);
 
             if (TexturesAllocated)
             {

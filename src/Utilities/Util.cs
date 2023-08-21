@@ -382,7 +382,8 @@ namespace Trajectories
         // --- CONFIG ---------------------------------------------------------------
 
         /// <returns> A config node from the config system </returns>
-        internal static ConfigNode ParseConfig(string path) => GameDatabase.Instance.GetConfigNode(path) ?? new ConfigNode();
+        //internal static ConfigNode ParseConfig(string path) => GameDatabase.Instance.GetConfigNode(path) ?? new ConfigNode();
+        internal static ConfigNode ParseConfig(string path) => GameDatabase.Instance.GetConfigNode(path) != null ? GameDatabase.Instance.GetConfigNode(path) : new ConfigNode();
 
         /// <returns> A set of config nodes from the config system </returns>
         internal static ConfigNode[] ParseConfigs(string path) => GameDatabase.Instance.GetConfigNodes(path);
