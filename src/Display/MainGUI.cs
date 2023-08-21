@@ -66,7 +66,7 @@ namespace Trajectories
         private static float screen_height = 0;
         private static float screen_half_width = 0;
         private static float screen_half_height = 0;
-        private static Rect gui_rect = new(0, 0, WIDTH, HEIGHT);
+        private static Rect gui_rect = new Rect(0, 0, WIDTH, HEIGHT);
         private static ControlTypes gui_control_type = ControlTypes.GUI | ControlTypes.MANNODE_ADDEDIT |
                                                         ControlTypes.MANNODE_DELETE | ControlTypes.MAP_UI;
 
