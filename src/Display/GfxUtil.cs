@@ -47,10 +47,12 @@ namespace Trajectories
                     return;
 
                 // Unity only allows one LineRenderer per object so we create a new one rather than attaching it to the camera
-                if (gameObject == null)
+                if (game_object == null)
+                {
                     game_object = new GameObject("Trajectories_LineRenderer");
+                }
                 //game_object ??= new GameObject("Trajectories_LineRenderer");
-                if (!game_object)
+                if (game_object == null)
                 {
                     Util.LogError("TrajectoryLine game object is null");
                     return;
@@ -69,11 +71,11 @@ namespace Trajectories
                 //material ??= new Material(Shader.Find("KSP/Particles/Additive"));    // fallback shader
 
                 if (material == null)
-                material = new Material(Shader.Find("KSP/Orbit Line"));
+                    material = new Material(Shader.Find("KSP/Orbit Line"));
                 if (material == null)
                     material = new Material(Shader.Find("KSP/Particles/Additive"));    // fallback shader
 
-                if (!material)
+                if (material == null)
                 {
                     Util.LogError("TrajectoryLine material is null");
                     return;
