@@ -35,8 +35,11 @@
 
 # 3:SOURCEFILE, DESTDIR
 3:Trajectories.version,GameData/Trajectories
-#3:LICENSE.md,GameData/Trajectories
-#3:README.md,GameData/Trajectories
+3:CHANGELOG.md,GameData/Trajectories
+3:CONTRIBUTING.md,GameData/Trajectories
+3:COPYRIGHTS.md,GameData/Trajectories
+3:LICENSE.md,GameData/Trajectories
+3:README.md,GameData/Trajectories
 
 # 4:SOURCDIR, DESTDIR
 #4:Textures,GameData/ManeuverQueue/Textures
