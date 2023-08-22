@@ -11,6 +11,7 @@ Changelog
     Renamed Plugin directory to Plugins
     Default behaviour for toolbar button now defaults to the stock toolbar
     Method of controlling which toolbar has the button now controlled by the ToolbarController
+    Moved textures into PluginData directory
     
 
 

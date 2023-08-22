@@ -99,7 +99,7 @@ namespace Trajectories
             if (toolbarControl == null)
             {
                 GameObject g1 = new GameObject("g1");
-                string TrajTexturePath =  "Trajectories/Textures/";
+                string TrajTexturePath =  "Trajectories/PluginData/Textures/";
 
                 toolbarControl = g1.AddComponent<ToolbarControl>();
                 toolbarControl.AddToAllToolbars(null, null,
@@ -121,7 +121,7 @@ namespace Trajectories
                 Util.Log("Using Blizzy toolbar");
                 blizzy_toolbar_button = ToolbarManager.Instance.add(Localizer.Format("#autoLOC_Trajectories_Title"), "TrajectoriesGUI");
                 blizzy_toolbar_button.Visibility = BlizzyToolbarButtonVisibility.fetch;
-                blizzy_toolbar_button.TexturePath = "Trajectories/Textures/icon-blizzy";
+                blizzy_toolbar_button.TexturePath = "Trajectories/PluginData/Textures/icon-blizzy";
                 blizzy_toolbar_button.ToolTip = Localizer.Format("#autoLOC_Trajectories_AppButtonTooltip");
                 blizzy_toolbar_button.OnClick += OnBlizzyToggle;
             }
@@ -129,7 +129,7 @@ namespace Trajectories
             {
                 // setup a toolbar button for the stock toolbar
                 Util.Log("Using KSP stock toolbar");
-                string TrajTexturePath = KSPUtil.ApplicationRootPath + "GameData/Trajectories/Textures/";
+                string TrajTexturePath = KSPUtil.ApplicationRootPath + "GameData/Trajectories/PluginData/Textures/";
                 normal_icon_texture ??= new Texture2D(36, 36);
                 active_icon_texture ??= new Texture2D(36, 36);
                 auto_icon_texture ??= new Texture2D(36, 36);
@@ -269,7 +269,7 @@ namespace Trajectories
         internal static void ChangeIcon(IconStyleType iconstyle)
         {
             string icon = "";
-            string TrajTexturePath =  "Trajectories/Textures/";
+            string TrajTexturePath = "Trajectories/PluginData/Textures/";
 
             switch (iconstyle)
             {
