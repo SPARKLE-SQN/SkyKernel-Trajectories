@@ -1,6 +1,6 @@
 Changelog
 
-2.4.5 (unreleased)
+2.4.5 
     Adoption by Linuxgurugamer
     Replaced toolbar button code with the ToolbarController (replaced about 1000 lines of code)
     Fixed stock icon being badly formatted
@@ -12,6 +12,7 @@ Changelog
     Default behaviour for toolbar button now defaults to the stock toolbar
     Method of controlling which toolbar has the button now controlled by the ToolbarController
     Moved textures into PluginData directory
+    Downgrade code where it was using Null-coalescing operators
     
 
 
