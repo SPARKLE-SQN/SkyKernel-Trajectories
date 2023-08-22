@@ -23,7 +23,6 @@ using KSP.Localization;
 using KSP.UI.Screens;
 using ToolbarControl_NS;
 using UnityEngine;
-using ClickThroughFix;
 
 namespace Trajectories
 {
@@ -103,7 +102,7 @@ namespace Trajectories
 
                 toolbarControl = g1.AddComponent<ToolbarControl>();
                 toolbarControl.AddToAllToolbars(null, null,
-                    ApplicationLauncher.AppScenes.FLIGHT | ApplicationLauncher.AppScenes.MAPVIEW | ApplicationLauncher.AppScenes.TRACKSTATION,
+                    ApplicationLauncher.AppScenes.FLIGHT | ApplicationLauncher.AppScenes.MAPVIEW,
                     MODID,
                     "TrajectoriesButton",
                     TrajTexturePath + "icon",

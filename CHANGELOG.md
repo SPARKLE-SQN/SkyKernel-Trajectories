@@ -14,6 +14,7 @@ Changelog
     Moved textures into PluginData directory
     Downgrade code where it was using Null-coalescing operators
     
+    New dependency needed:  ToolbarController
 
 
 ## v2.4.4 for KSP 1.8 to 1.12.x
