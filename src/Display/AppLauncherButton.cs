@@ -34,6 +34,8 @@ namespace Trajectories
         internal const string MODID = "Trajectories_NS";
         internal const string MODNAME = "Trajectories";
 
+        internal const  string TRAJ_TEXTURE_PATH =  "Trajectories/PluginData/Textures/";
+
 #if false
         private class BlizzyToolbarButtonVisibility : IVisibility
         {
@@ -85,6 +87,7 @@ namespace Trajectories
         /// <summary> Current style of the toolbar button icon </summary>
         internal static IconStyleType IconStyle { get; private set; } = IconStyleType.NORMAL;
 
+
         /// <summary> Creates the toolbar button for either a KSP stock toolbar or Blizzy toolbar if available. </summary>
         internal static void Start()
         {
@@ -98,17 +101,16 @@ namespace Trajectories
             if (toolbarControl == null)
             {
                 GameObject g1 = new GameObject("g1");
-                string TrajTexturePath =  "Trajectories/PluginData/Textures/";
 
                 toolbarControl = g1.AddComponent<ToolbarControl>();
                 toolbarControl.AddToAllToolbars(null, null,
                     ApplicationLauncher.AppScenes.FLIGHT | ApplicationLauncher.AppScenes.MAPVIEW,
                     MODID,
                     "TrajectoriesButton",
-                    TrajTexturePath + "icon",
-                    TrajTexturePath + "iconActive",
-                    TrajTexturePath + "icon-blizzy",
-                    TrajTexturePath + "icon-blizzy",
+                    TRAJ_TEXTURE_PATH + "icon",
+                    TRAJ_TEXTURE_PATH + "iconActive",
+                    TRAJ_TEXTURE_PATH + "icon-blizzy",
+                    TRAJ_TEXTURE_PATH + "icon-blizzy",
                     MODNAME
                 );
                 toolbarControl.AddLeftRightClickCallbacks(OnLeftToggle, OnRightToggle);
@@ -268,22 +270,21 @@ namespace Trajectories
         internal static void ChangeIcon(IconStyleType iconstyle)
         {
             string icon = "";
-            string TrajTexturePath = "Trajectories/PluginData/Textures/";
 
             switch (iconstyle)
             {
                 case IconStyleType.ACTIVE:
-                    icon = TrajTexturePath + "iconActive";
+                    icon = TRAJ_TEXTURE_PATH + "iconActive";
                     break;
                 case IconStyleType.AUTO:
-                    icon = TrajTexturePath + "iconAuto";
+                    icon = TRAJ_TEXTURE_PATH + "iconAuto";
                     break;
                 default:
-                    icon = TrajTexturePath + "icon";
+                    icon = TRAJ_TEXTURE_PATH + "icon";
                     break;
             }
 
-            toolbarControl.SetTexture(icon, TrajTexturePath + "icon-blizzy");
+            toolbarControl.SetTexture(icon, TRAJ_TEXTURE_PATH + "icon-blizzy");
 #if false
                 // no icons for blizzy yet so only change the current icon style
                 if (ToolbarManager.ToolbarAvailable && Settings.UseBlizzyToolbar)

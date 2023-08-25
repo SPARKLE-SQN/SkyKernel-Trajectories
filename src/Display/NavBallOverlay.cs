@@ -89,7 +89,7 @@ namespace Trajectories
             {
                 if (!constructed)
                 {
-                    string TrajTexturePath = KSPUtil.ApplicationRootPath + "GameData/Trajectories/PluginData/Textures/";
+                    string TrajTexturePath = KSPUtil.ApplicationRootPath + "GameData/" + AppLauncherButton.TRAJ_TEXTURE_PATH;  // Trajectories/PluginData/Textures/";
                     guide_texture.LoadImage(File.ReadAllBytes(TrajTexturePath + "GuideNavMarker.png"));
                     reference_texture.LoadImage(File.ReadAllBytes(TrajTexturePath + "RefNavMarker.png"));
                     constructed = true;
