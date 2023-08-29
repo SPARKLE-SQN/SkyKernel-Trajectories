@@ -1,5 +1,11 @@
 Changelog
 
+2.4.5.2 (unreleased)
+    Added toggle to swap left/right clicks  (replaced the Blizzy option)
+    Fixed toobar button colors
+    More cleanup of old toolbar code
+    Fixed issue of dialog locks activating when dialog was hidden (caused by a typo)
+
 2.4.5 
     Adoption by Linuxgurugamer
     Replaced toolbar button code with the ToolbarController (replaced about 1000 lines of code)

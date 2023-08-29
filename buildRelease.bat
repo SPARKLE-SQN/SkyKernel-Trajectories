@@ -26,7 +26,7 @@ rem README is the readme file
 set GAMEDIR=Trajectories
 set GAMEDATA="GameData\"
 set VERSIONFILE=%GAMEDIR%.version
-set LICENSE=License.txt
+set LICENSE=LICENSE.md
 set README=ReadMe.md
 
 set RELEASEDIR=d:\Users\jbb\release

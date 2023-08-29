@@ -67,23 +67,24 @@ namespace Trajectories
             ACTIVE,
             AUTO
         }
+        internal static ToolbarControl toolbarControl;
 
+#if false
         // Textures for icons (held here for better performance when switching icons on the stock toolbar)
         private static Texture2D normal_icon_texture = null;
         private static Texture2D active_icon_texture = null;
         private static Texture2D auto_icon_texture = null;
 
-        static ToolbarControl toolbarControl;
 
-#if false
         // Toolbar buttons
         private static ApplicationLauncherButton stock_toolbar_button = null;
         private static IButton blizzy_toolbar_button = null;
+
+        private static bool StockTexturesAllocated => (normal_icon_texture != null && active_icon_texture != null && auto_icon_texture != null);
 #endif
 
         private static bool constructed = false;
 
-        private static bool StockTexturesAllocated => (normal_icon_texture != null && active_icon_texture != null && auto_icon_texture != null);
         /// <summary> Current style of the toolbar button icon </summary>
         internal static IconStyleType IconStyle { get; private set; } = IconStyleType.NORMAL;
 
@@ -107,13 +108,16 @@ namespace Trajectories
                     ApplicationLauncher.AppScenes.FLIGHT | ApplicationLauncher.AppScenes.MAPVIEW,
                     MODID,
                     "TrajectoriesButton",
-                    TRAJ_TEXTURE_PATH + "icon",
+                    TRAJ_TEXTURE_PATH + "iconAuto",
                     TRAJ_TEXTURE_PATH + "iconActive",
                     TRAJ_TEXTURE_PATH + "icon-blizzy",
                     TRAJ_TEXTURE_PATH + "icon-blizzy",
                     MODNAME
                 );
-                toolbarControl.AddLeftRightClickCallbacks(OnLeftToggle, OnRightToggle);
+                if (!Settings.SwapLeftRightClicks)
+                    toolbarControl.AddLeftRightClickCallbacks(OnLeftToggle, OnRightToggle);
+                else
+                    toolbarControl.AddLeftRightClickCallbacks(OnRightToggle, OnLeftToggle);
             }
 #if false
             if (ToolbarManager.ToolbarAvailable && Settings.UseBlizzyToolbar)
@@ -157,10 +161,12 @@ namespace Trajectories
         {
             Util.DebugLog("");
             DestroyToolbarButton();
+#if false
             normal_icon_texture = null;
             active_icon_texture = null;
             auto_icon_texture = null;
             constructed = false;
+#endif
         }
 
         internal static void DestroyToolbarButton()
@@ -184,22 +190,26 @@ namespace Trajectories
         }
 #endif
 
-        private static void OnLeftToggle()
+        internal static void OnLeftToggle()
         {
             // check that we have patched conics. If not, apologize to the user and return.
             if (!Util.IsPatchedConicsAvailable)
             {
                 ScreenMessages.PostScreenMessage(Localizer.Format("#autoLOC_Trajectories_ConicsErr"));
                 Settings.DisplayTrajectories = false;
-                return;
+                return; 
             }
 
             Settings.DisplayTrajectories = !Settings.DisplayTrajectories;
+            MainGUI. OnButtonClick_DisplayTrajectories(Settings.DisplayTrajectories);
+
         }
-        private static void OnRightToggle()
+        internal static void OnRightToggle()
         {
             Settings.MainGUIEnabled = !Settings.MainGUIEnabled;
         }
+
+#if false
         private static void OnBlizzyToggle(ClickEvent e)
         {
             if (e.MouseButton == 0)
@@ -220,7 +230,6 @@ namespace Trajectories
             }
         }
 
-#if false
         private static void OnStockTrue() => Settings.MainGUIEnabled = true;
 
         private static void OnStockFalse() => Settings.MainGUIEnabled = false;
@@ -275,12 +284,15 @@ namespace Trajectories
             {
                 case IconStyleType.ACTIVE:
                     icon = TRAJ_TEXTURE_PATH + "iconActive";
+                    IconStyle = IconStyleType.ACTIVE;
                     break;
                 case IconStyleType.AUTO:
                     icon = TRAJ_TEXTURE_PATH + "iconAuto";
+                    IconStyle = IconStyleType.AUTO;
                     break;
                 default:
                     icon = TRAJ_TEXTURE_PATH + "icon";
+                    IconStyle = IconStyleType.NORMAL;
                     break;
             }
 

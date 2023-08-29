@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KSP.Localization;
 using TMPro;
+using ToolbarControl_NS;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -259,7 +260,6 @@ namespace Trajectories
                 }
                 return;
             }
-
             // keyboard unlock for manual target edit box
             if ((Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter)) &&
                 (InputLockManager.GetControlLock("TrajectoriesKeyboardLockout") == ControlTypes.KEYBOARDINPUT))
@@ -286,18 +286,20 @@ namespace Trajectories
             {
                 Show();
             }
-
-            if (InputLockManager.GetControlLock("TrajectoriesGUILockout") == ControlTypes.None)
+            if (Settings.MainGUIEnabled && visible && popup_dialog != null)
             {
-                if (MouseOver)
-                    GUILockout();
-            }
-            else if (!MouseOver)
-            {
-                GUIUnlock();
-            }
+                if (InputLockManager.GetControlLock("TrajectoriesGUILockout") == ControlTypes.None)
+                {
+                    if (MouseOver)
+                        GUILockout();
+                }
+                else if (!MouseOver)
+                {
+                    GUIUnlock();
+                }
 
-            UpdatePages();
+                UpdatePages();
+            }
         }
 
         internal static void DeSpawn()
@@ -448,8 +450,11 @@ namespace Trajectories
                     new DialogGUILabel(Localizer.Format("#autoLOC_Trajectories_Hori"), LAT_LONG_WIDTH),
                     impact_horizontal_label),
                 new DialogGUIHorizontalLayout(TextAnchor.MiddleRight,
-                    new DialogGUILabel(() => { return TargetProfile.Body == null ? "" :
-                        Localizer.Format("#autoLOC_Trajectories_TargetDistance"); }, true),
+                    new DialogGUILabel(() =>
+                    {
+                        return TargetProfile.Body == null ? "" :
+                        Localizer.Format("#autoLOC_Trajectories_TargetDistance");
+                    }, true),
                     info_distance_label,
                     new DialogGUISpace(2),
                     info_distance_latitude_label,
@@ -557,6 +562,10 @@ namespace Trajectories
             settings_page = new DialogGUIVerticalLayout(false, true, 0, new RectOffset(), TextAnchor.UpperCenter,
                 //new DialogGUIToggle(() => { return ToolbarManager.ToolbarAvailable ? Settings.UseBlizzyToolbar : false; },
                 //    Localizer.Format("#autoLOC_Trajectories_UseBlizzyToolbar"), OnButtonClick_UseBlizzyToolbar),
+
+                new DialogGUIToggle(() => { return Settings.SwapLeftRightClicks; },
+                    Localizer.Format("Swap Left/Right clicks for toolbar button"), OnButtonClick_SwapLeftRightClicks),
+
                 new DialogGUIToggle(() => { return Settings.DefaultDescentIsRetro; },
                     Localizer.Format("#autoLOC_Trajectories_DefaultDescent"), OnButtonClick_UseDescentRetro),
                 new DialogGUIHorizontalLayout(false, false, 0, new RectOffset(), TextAnchor.MiddleCenter,
@@ -676,15 +685,17 @@ namespace Trajectories
 
         private static void AddListener(TMP_InputField input)
         {
+#if true
             input.onSelect.AddListener(keyboard_lockout_action);
             input.onDeselect.AddListener(keyboard_unlock_action);
             input.onEndEdit.AddListener(keyboard_unlock_action);
+#endif
         }
 
         /// <summary>
         /// Creates the event listeners for the text input boxes
         /// </summary>
-        private static void SetTextInputBoxEvents()
+        private static void SetTextInputBoxEvents(bool add=true)
         {
             keyboard_lockout_action = new UnityAction<string>(KeyboardLockout);
             keyboard_unlock_action = new UnityAction<string>(KeyboardUnlock);
@@ -717,6 +728,7 @@ namespace Trajectories
                 AddListener(tmpro_descent_ground_textinput);
             }
         }
+
 
         /// <summary> Locks out the keyboards input </summary>
         private static void KeyboardLockout(string inString = "") => InputLockManager.SetControlLock(ControlTypes.KEYBOARDINPUT, "TrajectoriesKeyboardLockout");
@@ -843,7 +855,7 @@ namespace Trajectories
 
         private static void OnButtonClick_Settings() => ChangePage(PageType.SETTINGS);
 
-        private static void OnButtonClick_DisplayTrajectories(bool inState)
+        internal static void OnButtonClick_DisplayTrajectories(bool inState)
         {
             // check that we have patched conics. If not, apologize to the user and return.
             if (inState && !Util.IsPatchedConicsAvailable)
@@ -885,6 +897,15 @@ namespace Trajectories
                 Settings.UseBlizzyToolbar = inState;
         }
 #endif
+
+        private static void OnButtonClick_SwapLeftRightClicks(bool inState)
+        {
+            if (Settings.SwapLeftRightClicks)
+                AppLauncherButton.toolbarControl.AddLeftRightClickCallbacks(AppLauncherButton.OnLeftToggle, AppLauncherButton.OnRightToggle);
+            else
+                AppLauncherButton.toolbarControl.AddLeftRightClickCallbacks(AppLauncherButton.OnRightToggle, AppLauncherButton.OnLeftToggle);
+            Settings.SwapLeftRightClicks = inState;
+        }
 
         private static void OnButtonClick_Prograde()
         {
@@ -1149,7 +1170,7 @@ namespace Trajectories
             }
             return null;
         }
-#endregion
+        #endregion
 
         #region Callback methods for the Gui components
         // Callback methods are used by the Gui to retrieve information it needs either for displaying or setting values.

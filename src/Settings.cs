@@ -38,8 +38,11 @@ namespace Trajectories
             internal Persistent(object Default) => DefaultValue = Default;
         }
 
-        [Persistent(Default: true)]
-        internal static bool UseBlizzyToolbar { get; set; }
+        //[Persistent(Default: true)]
+        //internal static bool UseBlizzyToolbar { get; set; }
+
+        [Persistent(Default: false)]
+        internal static bool SwapLeftRightClicks { get; set; }
 
         [Persistent(Default: false)]
         internal static bool DisplayTrajectories { get; set; }
