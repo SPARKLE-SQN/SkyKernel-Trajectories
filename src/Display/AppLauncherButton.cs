@@ -34,7 +34,7 @@ namespace Trajectories
         internal const string MODID = "Trajectories_NS";
         internal const string MODNAME = "Trajectories";
 
-        internal const  string TRAJ_TEXTURE_PATH =  "Trajectories/PluginData/Textures/";
+        internal const string TRAJ_TEXTURE_PATH = "Trajectories/PluginData/Textures/";
 
 #if false
         private class BlizzyToolbarButtonVisibility : IVisibility
@@ -114,10 +114,7 @@ namespace Trajectories
                     TRAJ_TEXTURE_PATH + "icon-blizzy",
                     MODNAME
                 );
-                if (!Settings.SwapLeftRightClicks)
-                    toolbarControl.AddLeftRightClickCallbacks(OnLeftToggle, OnRightToggle);
-                else
-                    toolbarControl.AddLeftRightClickCallbacks(OnRightToggle, OnLeftToggle);
+                toolbarControl.AddLeftRightClickCallbacks(OnLeftToggle, OnRightToggle);
             }
 #if false
             if (ToolbarManager.ToolbarAvailable && Settings.UseBlizzyToolbar)
@@ -192,19 +189,33 @@ namespace Trajectories
 
         internal static void OnLeftToggle()
         {
+            if (Settings.SwapLeftRightClicks)
+                OnMainGUIToggle();
+            else
+                OnTrajectoryToggle();
+        }
+        internal static void OnRightToggle()
+        {
+            if (Settings.SwapLeftRightClicks)
+                OnTrajectoryToggle();
+            else
+                OnMainGUIToggle();
+        }
+        internal static void OnTrajectoryToggle()
+        {
             // check that we have patched conics. If not, apologize to the user and return.
             if (!Util.IsPatchedConicsAvailable)
             {
                 ScreenMessages.PostScreenMessage(Localizer.Format("#autoLOC_Trajectories_ConicsErr"));
                 Settings.DisplayTrajectories = false;
-                return; 
+                return;
             }
 
             Settings.DisplayTrajectories = !Settings.DisplayTrajectories;
-            MainGUI. OnButtonClick_DisplayTrajectories(Settings.DisplayTrajectories);
+            MainGUI.OnButtonClick_DisplayTrajectories(Settings.DisplayTrajectories);
 
         }
-        internal static void OnRightToggle()
+        internal static void OnMainGUIToggle()
         {
             Settings.MainGUIEnabled = !Settings.MainGUIEnabled;
         }

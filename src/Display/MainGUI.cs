@@ -695,7 +695,7 @@ namespace Trajectories
         /// <summary>
         /// Creates the event listeners for the text input boxes
         /// </summary>
-        private static void SetTextInputBoxEvents(bool add=true)
+        private static void SetTextInputBoxEvents(bool add = true)
         {
             keyboard_lockout_action = new UnityAction<string>(KeyboardLockout);
             keyboard_unlock_action = new UnityAction<string>(KeyboardUnlock);
@@ -898,14 +898,7 @@ namespace Trajectories
         }
 #endif
 
-        private static void OnButtonClick_SwapLeftRightClicks(bool inState)
-        {
-            if (Settings.SwapLeftRightClicks)
-                AppLauncherButton.toolbarControl.AddLeftRightClickCallbacks(AppLauncherButton.OnLeftToggle, AppLauncherButton.OnRightToggle);
-            else
-                AppLauncherButton.toolbarControl.AddLeftRightClickCallbacks(AppLauncherButton.OnRightToggle, AppLauncherButton.OnLeftToggle);
-            Settings.SwapLeftRightClicks = inState;
-        }
+        private static void OnButtonClick_SwapLeftRightClicks(bool inState) => Settings.SwapLeftRightClicks = inState;
 
         private static void OnButtonClick_Prograde()
         {
