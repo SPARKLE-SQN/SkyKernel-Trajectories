@@ -360,39 +360,42 @@ namespace Trajectories
                     aerodynamicModel_.UpdateVesselMass();
                 }
 
-                // if there is no ongoing partial computation, start a new one
-                if (partialComputation_ == null)
+                if (aerodynamicModel_.IsReady())
                 {
-                    //total_time = Util.Clocks;
+                    // if there is no ongoing partial computation, start a new one
+                    if (partialComputation_ == null)
+                    {
+                        //total_time = Util.Clocks;
 
-                    // restart the public buffers
-                    patchesBackBuffer_.Clear();
-                    maxAccelBackBuffer_ = 0;
+                        // restart the public buffers
+                        patchesBackBuffer_.Clear();
+                        maxAccelBackBuffer_ = 0;
 
-                    // Create enumerator for Trajectory increment calculator
-                    partialComputation_ = ComputeTrajectoryIncrement().GetEnumerator();
-                }
+                        // Create enumerator for Trajectory increment calculator
+                        partialComputation_ = ComputeTrajectoryIncrement().GetEnumerator();
+                    }
 
-                // we are finished when there are no more partial computations to be done
-                bool finished = !partialComputation_.MoveNext();
+                    // we are finished when there are no more partial computations to be done
+                    bool finished = !partialComputation_.MoveNext();
 
-                // when calculation is finished,
-                if (finished)
-                {
-                    // swap the buffers for the patches and the maximum acceleration,
-                    // "publishing" the results
-                    List<Patch> tmp = Patches;
-                    Patches = patchesBackBuffer_;
-                    patchesBackBuffer_ = tmp;
+                    // when calculation is finished,
+                    if (finished)
+                    {
+                        // swap the buffers for the patches and the maximum acceleration,
+                        // "publishing" the results
+                        List<Patch> tmp = Patches;
+                        Patches = patchesBackBuffer_;
+                        patchesBackBuffer_ = tmp;
 
-                    MaxAccel = maxAccelBackBuffer_;
+                        MaxAccel = maxAccelBackBuffer_;
 
-                    // Reset partial computation
-                    partialComputation_.Dispose();
-                    partialComputation_ = null;
+                        // Reset partial computation
+                        partialComputation_.Dispose();
+                        partialComputation_ = null;
 
-                    // how long did the whole calculation take?
-                    //total_time = Util.ElapsedMilliseconds(total_time);
+                        // how long did the whole calculation take?
+                        //total_time = Util.ElapsedMilliseconds(total_time);
+                    }
                 }
 
                 // how long did the calculation in this frame take?

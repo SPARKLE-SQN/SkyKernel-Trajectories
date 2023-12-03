@@ -25,11 +25,11 @@ using UnityEngine;
 
 namespace Trajectories
 {
-    class StockModel: AeroDynamicModel
+    class StockModel : AeroDynamicModel
     {
         public override string AeroDynamicModelName { get { return Localizer.Format("#autoLOC_Trajectories_Stock"); } }
 
-        public StockModel(CelestialBody body) : base( body) { }
+        public StockModel(CelestialBody body) : base(body) { }
 
         protected override Vector3d ComputeForces_Model(Vector3d airVelocity, double altitude)
         {
@@ -53,5 +53,9 @@ namespace Trajectories
 
             return new Vector3d(packedForces.x * scale, packedForces.y * scale, 0.0d);
         }
+
+        // Stock model seems to be always ready to compute forces. If this turns out to be false,
+        // implement this function.
+        public override bool IsReady() => true;
     }
 }
