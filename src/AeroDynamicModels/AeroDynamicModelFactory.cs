@@ -37,10 +37,20 @@ namespace Trajectories
                     {
                         case "FerramAerospaceResearch":
                             var FARAPIType = loadedAssembly.assembly.GetType("FerramAerospaceResearch.FARAPI");
+                            var FARAPI_CalculateVesselAeroForces = FARAPIType.GetMethodEx(
+                                "CalculateVesselAeroForces",
+                                BindingFlags.Public | BindingFlags.Static,
+                                new Type[] { typeof(Vessel), typeof(Vector3).MakeByRefType(), typeof(Vector3).MakeByRefType(), typeof(Vector3), typeof(double) }
+                            );
 
-                                var FARAPI_CalculateVesselAeroForces = FARAPIType.GetMethodEx("CalculateVesselAeroForces", BindingFlags.Public | BindingFlags.Static, new Type[] { typeof(Vessel), typeof(Vector3).MakeByRefType(), typeof(Vector3).MakeByRefType(), typeof(Vector3), typeof(double) });
+                            var FARVesselAeroType = loadedAssembly.assembly.GetType("FerramAerospaceResearch.FARAeroComponents.FARVesselAero");
+                            var FARVesselAero_HasValidVoxelizationCurrently = FARVesselAeroType.GetMethodEx(
+                                "HasValidVoxelizationCurrently",
+                                BindingFlags.Public | BindingFlags.Instance,
+                                new Type[] { }
+                            );
 
-                            return new FARModel(body, FARAPI_CalculateVesselAeroForces);
+                            return new FARModel(body, FARAPI_CalculateVesselAeroForces, FARVesselAero_HasValidVoxelizationCurrently);
 
                         //case "MyModAssembly":
                         // implement here your atmo mod detection

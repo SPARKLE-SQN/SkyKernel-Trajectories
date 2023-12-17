@@ -100,7 +100,7 @@ namespace Trajectories
             if (!Trajectories.IsVesselAttached || body_ != body)
                 return false;
 
-            if (Settings.AutoUpdateAeroDynamicModel)
+            if (Settings.AutoUpdateAeroDynamicModel && IsReady())
             {
                 double newRefDrag = ComputeReferenceDrag();
                 if (referenceDrag == 0)
@@ -251,5 +251,10 @@ namespace Trajectories
         /// See PackForces
         /// </summary>
         public virtual Vector3d UnpackForces(Vector2d packedForces, double altitudeAboveSea, double velocity) => new Vector3d(packedForces.x, packedForces.y, 0.0);
+
+        /// <summary>
+        /// Returns true when the aerodynamic model is ready to compute forces.
+        /// </summary>
+        public abstract bool IsReady();
     }
 }

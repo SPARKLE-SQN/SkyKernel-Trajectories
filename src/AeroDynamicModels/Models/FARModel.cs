@@ -26,16 +26,18 @@ using UnityEngine;
 
 namespace Trajectories
 {
-    class FARModel: AeroDynamicModel
+    class FARModel : AeroDynamicModel
     {
-        private MethodInfo FARAPI_CalculateVesselAeroForces;
+        private readonly MethodInfo FARAPI_CalculateVesselAeroForces;
+        private readonly MethodInfo FARVesselAero_HasValidVoxelizationCurrently;
 
         public override string AeroDynamicModelName { get { return "FAR"; } }
 
-        public FARModel(CelestialBody body, MethodInfo CalculateVesselAeroForces)
+        public FARModel(CelestialBody body, MethodInfo CalculateVesselAeroForces, MethodInfo HasValidVoxelizationCurrently)
             : base(body)
         {
             FARAPI_CalculateVesselAeroForces = CalculateVesselAeroForces;
+            FARVesselAero_HasValidVoxelizationCurrently = HasValidVoxelizationCurrently;
         }
 
         protected override Vector3d ComputeForces_Model(Vector3d airVelocity, double altitude)
@@ -73,6 +75,22 @@ namespace Trajectories
             double scale = velocity * velocity * rho;
 
             return new Vector3d(packedForces.x * scale, packedForces.y * scale, 0.0d);
+        }
+
+        public override bool IsReady()
+        {
+            // FAR is ready to compute forces when the active vessel is not packed and the vessel's
+            // FARVesselAero-component reports that it has a valid voxelization.
+            if (Trajectories.IsVesselAttached && !Trajectories.AttachedVessel.packed)
+            {
+                Type FARVesselAeroType = FARVesselAero_HasValidVoxelizationCurrently.ReflectedType;
+                var vesselAero = Trajectories.AttachedVessel.GetComponent(FARVesselAeroType);
+                if (vesselAero != null)
+                {
+                    return (bool)FARVesselAero_HasValidVoxelizationCurrently.Invoke(vesselAero, null);
+                }
+            }
+            return false;
         }
     }
 }
