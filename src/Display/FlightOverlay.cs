@@ -32,6 +32,7 @@ namespace Trajectories
         private static GfxUtil.TargetingCross target_cross;
 
         // update method variables, put here to stop over use of the garbage collector.
+        private static double current_time = 0d;
         private static double time = 0d;
         private static double time_increment = 0d;
         private static Orbit orbit = null;
@@ -90,6 +91,8 @@ namespace Trajectories
             line.Clear();
             line.Add(Trajectories.AttachedVessel.transform.TransformPoint(Vector3.zero));
 
+            current_time = Planetarium.GetUniversalTime();
+
             for (int pi = 0; pi < Trajectory.Patches.Count; ++pi)
             {
                 patch = Trajectory.Patches[pi];
@@ -99,8 +102,11 @@ namespace Trajectories
                 {
                     for (uint i = 0; i < patch.AtmosphericTrajectory.Length; ++i)
                     {
-                        vertex = patch.AtmosphericTrajectory[i].pos + bodyPosition;
-                        line.Add(vertex);
+                        if (patch.AtmosphericTrajectory[i].time > current_time)
+                        {
+                            vertex = patch.AtmosphericTrajectory[i].pos + bodyPosition;
+                            line.Add(vertex);
+                        }
                     }
                 }
                 else
@@ -110,14 +116,16 @@ namespace Trajectories
                     orbit = patch.SpaceOrbit;
                     for (uint i = 0; i < DEFAULT_VERTEX_COUNT; ++i)
                     {
-                        vertex = Util.SwapYZ(orbit.getRelativePositionAtUT(time));
-                        if (Settings.BodyFixedMode)
-                            vertex = Trajectory.CalculateRotatedPosition(orbit.referenceBody, vertex, time);
+                        if (time > current_time)
+                        {
+                            vertex = Util.SwapYZ(orbit.getRelativePositionAtUT(time));
+                            if (Settings.BodyFixedMode)
+                                vertex = Trajectory.CalculateRotatedPosition(orbit.referenceBody, vertex, time);
 
-                        vertex += bodyPosition;
+                            vertex += bodyPosition;
 
-                        line.Add(vertex);
-
+                            line.Add(vertex);
+                        }
                         time += time_increment;
                     }
                 }
