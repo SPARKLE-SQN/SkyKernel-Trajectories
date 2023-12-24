@@ -35,6 +35,7 @@ namespace Trajectories
         private static double time = 0d;
         private static double time_increment = 0d;
         private static Orbit orbit = null;
+        private static Trajectory.Patch patch = null;
         private static Trajectory.Patch lastPatch = null;
         private static Vector3d bodyPosition = Vector3d.zero;
         private static Vector3d vertex = Vector3.zero;
@@ -89,36 +90,42 @@ namespace Trajectories
             line.Clear();
             line.Add(Trajectories.AttachedVessel.transform.TransformPoint(Vector3.zero));
 
-            lastPatch = Trajectory.Patches[Trajectory.Patches.Count - 1];
-            bodyPosition = lastPatch.StartingState.ReferenceBody.position;
-            if (lastPatch.IsAtmospheric)
+            for (int pi = 0; pi < Trajectory.Patches.Count; ++pi)
             {
-                for (uint i = 0; i < lastPatch.AtmosphericTrajectory.Length; ++i)
+                patch = Trajectory.Patches[pi];
+
+                bodyPosition = patch.StartingState.ReferenceBody.position;
+                if (patch.IsAtmospheric)
                 {
-                    vertex = lastPatch.AtmosphericTrajectory[i].pos + bodyPosition;
-                    line.Add(vertex);
+                    for (uint i = 0; i < patch.AtmosphericTrajectory.Length; ++i)
+                    {
+                        vertex = patch.AtmosphericTrajectory[i].pos + bodyPosition;
+                        line.Add(vertex);
+                    }
                 }
-            }
-            else
-            {
-                time = lastPatch.StartingState.Time;
-                time_increment = (lastPatch.EndTime - lastPatch.StartingState.Time) / DEFAULT_VERTEX_COUNT;
-                orbit = lastPatch.SpaceOrbit;
-                for (uint i = 0; i < DEFAULT_VERTEX_COUNT; ++i)
+                else
                 {
-                    vertex = Util.SwapYZ(orbit.getRelativePositionAtUT(time));
-                    if (Settings.BodyFixedMode)
-                        vertex = Trajectory.CalculateRotatedPosition(orbit.referenceBody, vertex, time);
+                    time = patch.StartingState.Time;
+                    time_increment = (patch.EndTime - patch.StartingState.Time) / DEFAULT_VERTEX_COUNT;
+                    orbit = patch.SpaceOrbit;
+                    for (uint i = 0; i < DEFAULT_VERTEX_COUNT; ++i)
+                    {
+                        vertex = Util.SwapYZ(orbit.getRelativePositionAtUT(time));
+                        if (Settings.BodyFixedMode)
+                            vertex = Trajectory.CalculateRotatedPosition(orbit.referenceBody, vertex, time);
 
-                    vertex += bodyPosition;
+                        vertex += bodyPosition;
 
-                    line.Add(vertex);
+                        line.Add(vertex);
 
-                    time += time_increment;
+                        time += time_increment;
+                    }
                 }
             }
 
             line.enabled = true;
+
+            lastPatch = Trajectory.Patches[Trajectory.Patches.Count - 1];
 
             // red impact cross
             if (lastPatch.ImpactPosition != null)
