@@ -1,6 +1,16 @@
 Changelog
 
-2.4.5.2 (unreleased)
+2.4.5.3
+	Thanks to github user @Tuupertunut for these fixes
+		Fix wrong trajectory after timewarp/loading in FAR model
+		Fix swapping left and right clicks toggles between four states
+        In-flight overlay now shows the whole trajectory
+    Fixed button icon display when starting to show correct icon (was always showing the Active icon to start, even when it was not active)
+    Replaced logging with KSP_Log (now needs SpaceTuxUtilities as new dependency)
+    Added code to dump config to log file when in debug mode
+
+
+2.4.5.2 
     Added toggle to swap left/right clicks  (replaced the Blizzy option)
     Fixed toobar button colors
     More cleanup of old toolbar code

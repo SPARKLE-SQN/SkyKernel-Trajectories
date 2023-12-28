@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using UnityEngine;
+using static Trajectories.RegisterToolbar;
 
 namespace Trajectories
 {
@@ -43,24 +44,21 @@ namespace Trajectories
         }
 
         ///<summary> Writes a message to the log with 'Trajectories' appended to the message </summary>
-        internal static void Log(string message, params object[] param) => UnityEngine.Debug.Log(string.Format("[{0}] {1}",
-            MainGUI.TrajectoriesTitle, string.Format(message, param)));
+        internal static void Log(string message, params object[] param) => LGG_Log.Info(string.Format(message, param)); 
 
         ///<summary> Writes a warning message to the log with 'Trajectories' appended to the message </summary>
-        internal static void LogWarning(string message, params object[] param) => UnityEngine.Debug.LogWarning(string.Format("[{0}] Warning: {1}",
-            MainGUI.TrajectoriesTitle, string.Format(message, param)));
+        internal static void LogWarning(string message, params object[] param) => LGG_Log.Warn( string.Format(message, param));
 
         ///<summary> Writes an error message to the log with 'Trajectories' appended to the message </summary>
-        internal static void LogError(string message, params object[] param) => UnityEngine.Debug.LogError(string.Format("[{0}] Error: {1}",
-            MainGUI.TrajectoriesTitle, string.Format(message, param)));
+        internal static void LogError(string message, params object[] param) => LGG_Log.Error(string.Format(message, param));
 
         ///<summary> Writes a debug message to the log with 'Trajectories' and stack trace info appended to the message </summary>
         [Conditional("DEBUG")]
         internal static void DebugLog(string message, params object[] param)
         {
             StackTrace stackTrace = new StackTrace();
-            UnityEngine.Debug.Log(string.Format("[{0}] Debug: {1}.{2} - {3}",
-                MainGUI.TrajectoriesTitle, stackTrace.GetFrame(1).GetMethod().ReflectedType.Name,
+            LGG_Log.Debug(string.Format("Debug: {0} - {1}",
+                stackTrace.GetFrame(1).GetMethod().ReflectedType.Name,
                 stackTrace.GetFrame(1).GetMethod().Name, string.Format(message, param)));
         }
 
@@ -69,8 +67,8 @@ namespace Trajectories
         internal static void DebugLogWarning(string message, params object[] param)
         {
             StackTrace stackTrace = new StackTrace();
-            UnityEngine.Debug.LogWarning(string.Format("[{0}] Warning: {1}.{2} - {3}",
-                MainGUI.TrajectoriesTitle, stackTrace.GetFrame(1).GetMethod().ReflectedType.Name,
+           LGG_Log.Warn(string.Format("Warning: {0}.{1} - {2}",
+                stackTrace.GetFrame(1).GetMethod().ReflectedType.Name,
                 stackTrace.GetFrame(1).GetMethod().Name, string.Format(message, param)));
         }
 
@@ -79,8 +77,8 @@ namespace Trajectories
         internal static void DebugLogError(string message, params object[] param)
         {
             StackTrace stackTrace = new StackTrace();
-            UnityEngine.Debug.LogError(string.Format("[{0}] Error: {1}.{2} - {3}",
-                MainGUI.TrajectoriesTitle, stackTrace.GetFrame(1).GetMethod().ReflectedType.Name,
+            LGG_Log.Error(string.Format("Error: {0}.{1 - {2}",
+                stackTrace.GetFrame(1).GetMethod().ReflectedType.Name,
                 stackTrace.GetFrame(1).GetMethod().Name, string.Format(message, param)));
         }
 

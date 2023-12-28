@@ -26,6 +26,7 @@ using System.Reflection;
 using KSP.IO;
 using KSP.Localization;
 using UnityEngine;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace Trajectories
 {
@@ -116,7 +117,7 @@ namespace Trajectories
             try
             {
                 //config ??= PluginConfiguration.CreateForType<Settings>();
-                if (config == null) 
+                if (config == null)
                     config = PluginConfiguration.CreateForType<Settings>();
             }
             catch (Exception e)
@@ -173,12 +174,12 @@ namespace Trajectories
                 string TrajPluginPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
                 Util.Log("Installed at: {0}", TrajPluginPath);
 
-                string s = System.Reflection.Assembly.GetExecutingAssembly().FullName;
-                s = s.Substring(0, s.IndexOf(','));
+                string assemblyName = System.Reflection.Assembly.GetExecutingAssembly().FullName;
+                assemblyName = assemblyName.Substring(0, assemblyName.IndexOf(','));
 
                 TrajPluginPath += "/PluginData/" +
                     //System.Reflection.Assembly.GetExecutingAssembly().FullName
-                    s
+                    assemblyName
                     + "/config.xml";
                 Util.Log("File at: {0}", TrajPluginPath);
                 if (System.IO.File.Exists(TrajPluginPath))
@@ -202,6 +203,26 @@ namespace Trajectories
             }
 
             Serialize();
+
+            Util.Log("SwapLeftRightClicks " + SwapLeftRightClicks);
+            Util.Log("DisplayTrajectories: " + DisplayTrajectories);
+            Util.Log("DisplayTrajectoriesInFlight: " + DisplayTrajectoriesInFlight);
+            Util.Log("AlwaysUpdate: " + AlwaysUpdate);
+            Util.Log("DisplayCompleteTrajectory: " + DisplayCompleteTrajectory);
+            Util.Log("BodyFixedMode: " + BodyFixedMode);
+            Util.Log("AutoUpdateAeroDynamicModel: " + AutoUpdateAeroDynamicModel);
+            Util.Log("MainGUIEnabled: " + MainGUIEnabled);
+            Util.Log("MainGUIWindowPos: " + MainGUIWindowPos);
+
+            Util.Log("MainGUICurrentPage: " + MainGUICurrentPage);
+            Util.Log("IntegrationStepSize: " + IntegrationStepSize);
+            Util.Log("MaxPatchCount: " + MaxPatchCount);
+            Util.Log("MaxFramesPerPatch: " + MaxFramesPerPatch);
+            Util.Log("UseCache: " + UseCache);
+            Util.Log("DefaultDescentIsRetro: " + DefaultDescentIsRetro);
+            Util.Log("EnableDisplayTrajectoryHotKeyMod: " + EnableDisplayTrajectoryHotKeyMod);
+            Util.Log("EnableMainGUIHotKeyMod: " + EnableMainGUIHotKeyMod);
+
         }
 
         internal static void Save()
